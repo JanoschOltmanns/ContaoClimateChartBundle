@@ -97,7 +97,7 @@
 
 <?php if ($this->climateData): ?>
 
-    <div class="climate-chart_wrapper" style="margin-top:1000px" data-climate-chart="<?= $this->id ?>">
+    <div class="climate-chart_wrapper" data-climate-chart="<?= $this->id ?>">
 
         <div class="climate-chart_diagramm">
 
