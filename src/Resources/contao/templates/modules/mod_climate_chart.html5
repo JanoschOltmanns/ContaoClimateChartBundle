@@ -1,0 +1,153 @@
+<?php $this->extend('block_searchable'); ?>
+
+<?php $this->block('content'); ?>
+
+<style>
+    .climate-chart_wrapper {
+        position: relative;
+    }
+    .climate-chart_wrapper * {
+        box-sizing: border-box;
+    }
+    .climate-chart_diagramm {
+        overflow: hidden;
+        height: 300px;
+        position: relative;
+        margin-left: 50px;
+    }
+    .climate-chart_diagramm .diagramm-bar {
+        background: blue;
+        border-left: 1px solid #fff;
+        border-right: 1px solid #fff;
+        width: 8%;
+        position: absolute;
+        bottom: 0;
+    }
+    .climate-chart_diagramm .diagramm-bar:nth-of-type(1) {
+        left: 0;
+    }
+    .climate-chart_diagramm .diagramm-bar:nth-of-type(2) {
+        left: 8%;
+    }
+    .climate-chart_diagramm .diagramm-bar:nth-of-type(3) {
+        left: 16%;
+    }
+    .climate-chart_diagramm .diagramm-bar:nth-of-type(4) {
+        left: 24%;
+    }
+    .climate-chart_diagramm .diagramm-bar:nth-of-type(5) {
+        left: 32%;
+    }
+    .climate-chart_diagramm .diagramm-bar:nth-of-type(6) {
+        left: 40%;
+    }
+    .climate-chart_diagramm .diagramm-bar:nth-of-type(7) {
+        left: 48%;
+    }
+    .climate-chart_diagramm .diagramm-bar:nth-of-type(8) {
+        left: 56%;
+    }
+    .climate-chart_diagramm .diagramm-bar:nth-of-type(9) {
+        left: 64%;
+    }
+    .climate-chart_diagramm .diagramm-bar:nth-of-type(10) {
+        left: 72%;
+    }
+    .climate-chart_diagramm .diagramm-bar:nth-of-type(11) {
+        left: 80%;
+    }
+    .climate-chart_diagramm .diagramm-bar:nth-of-type(12) {
+        left: 88%;
+    }
+    .climate-chart_wrapper.js--active .climate-chart_diagramm .diagramm-bar {
+        max-height: 0;
+        transition: max-height .4s ease-in-out;
+    }
+    .climate-chart_wrapper.js--active.js--in-viewport .climate-chart_diagramm .diagramm-bar {
+        max-height: 100%;
+    }
+    .climate-chart_diagramm .diagramm-bar .diagramm_value {
+        text-align: center;
+        width: 100%;
+        display: block;
+        transform: translateY(calc(-1em - 3px));
+    }
+    .climate-chart_ordinate {
+        position: absolute;
+        height: 300px;
+        left: 0;
+        top: 0;
+        width: 50px;
+    }
+    .climate-chart_ordinate .ordinate-entry {
+        position: absolute;
+        transform: translateY(-0.5em);
+    }
+    .climate-chart_abszisse {
+        overflow: hidden;
+        margin-left: 50px;
+    }
+    .climate-chart_abszisse .abszisse-entry {
+        width: 8%;
+        float: left;
+        text-align: center;
+    }
+
+</style>
+
+<?php if ($this->climateData): ?>
+
+    <div class="climate-chart_wrapper" style="margin-top:1000px" data-climate-chart="<?= $this->id ?>">
+
+        <div class="climate-chart_diagramm">
+
+            <?php foreach ($this->climateData as $climateData): ?>
+                <div class="diagramm-bar" style="height:<?= $climateData['rel'] ?>%"><span class="diagramm_value"><?= $climateData['label'] ?></span></div>
+            <?php endforeach; ?>
+
+        </div>
+
+        <div class="climate-chart_ordinate">
+
+            <?php foreach ($this->ordinateData as $ordinateData): ?>
+                <div class="ordinate-entry" style="top:<?= $ordinateData['rel'] ?>%"><?= $ordinateData['label'] ?></div>
+            <?php endforeach; ?>
+
+        </div>
+
+        <div class="climate-chart_abszisse">
+            <?php foreach ($this->climateData as $climateData): ?>
+                <div class="abszisse-entry"><?= \Date::parse('M', $climateData['date']->timestamp) ?></div>
+            <?php endforeach; ?>
+        </div>
+
+    </div>
+
+<?php endif; ?>
+
+<script>
+
+    $.fn.isInViewport = function() {
+        var elementTop = $(this).offset().top;
+        var elementBottom = elementTop + $(this).outerHeight();
+        var viewportTop = $(window).scrollTop();
+        var viewportBottom = viewportTop + $(window).height();
+        return elementBottom > viewportTop && elementTop < viewportBottom;
+    };
+
+    var $climateChart = jQuery('[data-climate-chart="<?= $this->id ?>"]');
+    $climateChart.addClass('js--active');
+
+    if ($climateChart.isInViewport()) {
+        $climateChart.addClass('js--in-viewport');
+    }
+
+    jQuery(window).on('resize scroll', function() {
+        if ($climateChart.isInViewport()) {
+            $climateChart.addClass('js--in-viewport');
+        }
+    });
+
+</script>
+
+<?php $this->endblock(); ?>
